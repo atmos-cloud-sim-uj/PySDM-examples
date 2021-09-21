@@ -1,7 +1,6 @@
 from PySDM.environments import Parcel
 from PySDM import Builder
 from PySDM.backends import CPU
-from PySDM.physics import si
 from PySDM.dynamics import AmbientThermodynamics, Condensation
 from PySDM.initialisation.multiplicities import discretise_n
 from PySDM.initialisation.r_wet_init import r_wet_init
@@ -57,7 +56,7 @@ class Simulation:
             del attributes['dry volume organic']
 
         builder.add_dynamic(AmbientThermodynamics())
-        builder.add_dynamic(Condensation())
+        builder.add_dynamic(Condensation(rtol_x=settings.rtol_x, rtol_thd=settings.rtol_thd))
 
         products = products or (
             PySDM_products.ParcelDisplacement(),

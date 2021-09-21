@@ -16,6 +16,7 @@ setup(
                       'PyMPDATA',
                       'atmos-cloud-sim-uj-utils',
                       'pystrict',
+                      'joblib',
                       'matplotlib',
                       'ipywidgets',
                       'ghapi'],  # note: test-time-requirement?

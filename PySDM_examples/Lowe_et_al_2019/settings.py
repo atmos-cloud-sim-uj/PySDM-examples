@@ -1,9 +1,9 @@
 import numpy as np
 from pystrict import strict
 from PySDM.initialisation import spectral_sampling as spec_sampling
-from PySDM.physics import si, Formulae, spectra, constants as const
+from PySDM.physics import si, Formulae, constants as const
 from PySDM_examples.Lowe_et_al_2019.aerosol import _Aerosol
-from PySDM.physics.spectra import Spectrum
+from PySDM.dynamics.condensation import default_rtol_x, default_rtol_thd
 
 
 @strict
@@ -12,6 +12,9 @@ class Settings:
                  aerosol: _Aerosol,
                  model: str,
                  spectral_sampling: type(spec_sampling.SpectralSampling),
+                 w: float = 0.32 * si.m / si.s,
+                 rtol_x: float = default_rtol_x,
+                 rtol_thd: float = default_rtol_thd
                  ):
         assert model in ('bulk', 'film')
         self.model = model
@@ -19,11 +22,13 @@ class Settings:
         self.formulae = Formulae(surface_tension='CompressedFilm' if model=='film' else 'Constant')
         self.aerosol = aerosol
         self.spectral_sampling = spectral_sampling
-        self.t_max = (400 + 196) * si.s
+        self.t_max = int(210 / w) * si.m
         self.output_interval = 10 * si.s
         self.dt = dt
+        self.rtol_x = rtol_x
+        self.rtol_thd = rtol_thd
 
-        self.w = .32 * si.m / si.s
+        self.w = w
         self.g = 9.81 * si.m / si.s**2
 
         self.p0 = 980 * si.mbar
